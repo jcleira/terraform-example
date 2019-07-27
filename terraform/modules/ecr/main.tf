@@ -1,5 +1,5 @@
  /*
- * ECR repository created to maintain the Wordpress docker images.
+ * ECR repository created to maintain wordpress docker images.
  */
 resource "aws_ecr_repository" "main" {
   name = var.name
@@ -12,7 +12,9 @@ resource "aws_ecr_repository" "main" {
 * an eye on that.
 *
 * TODO: If the current running image gets deleted using this policy we might
-* have problems on auto-scaling, we might use a unttagged policy rotation.
+* have problems on auto-scaling, possible solutions:
+*
+* - Use an untagged policy?
 */
 resource "aws_ecr_lifecycle_policy" "main" {
   repository = "${aws_ecr_repository.main.name}"

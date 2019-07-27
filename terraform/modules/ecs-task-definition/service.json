@@ -1,0 +1,21 @@
+[
+  {
+    "name": "${name}",
+    "image": "${repository}:${tag}",
+    "cpu": 10,
+    "memory": 512,
+    "essential": true,
+    "environment": [
+      { "name": "WORDPRESS_DB_HOST",     "value": "${wordpress_db_host}" },
+      { "name": "WORDPRESS_DB_NAME",     "value": "${wordpress_db_name}" },
+      { "name": "WORDPRESS_DB_USER",     "value": "${wordpress_db_user}" },
+      { "name": "WORDPRESS_DB_PASSWORD", "value": "${wordpress_db_pass}" }
+    ],
+    "portMappings": [
+      {
+        "containerPort": 80,
+        "hostPort": 80
+      }
+    ]
+  }
+]

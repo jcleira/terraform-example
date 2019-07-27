@@ -6,3 +6,11 @@ variable "name" {
   type = "string"
   description = "The base name for all the resources to create"
 }
+
+/*
+* The AWS account to provision resources to
+*/
+variable "aws_account" {
+  type = "string"
+  description = "The AWS account for all the resources to create"
+}
