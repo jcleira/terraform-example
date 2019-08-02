@@ -11,6 +11,8 @@ I've used Terraform to provision all AWS resources needed to run Wordpress on an
 
 I've added as many docs ass possible on project's files. This README.md add context but the same facts are explained on the files (I'm duplicating them due the nature of this repository).
 
+I've not configured any enhanced state management for terraform despite files within the directories, this should be a must on any environment different from testing.
+
 I'm not 100% happy with the results. My first intention was to create a near production ready environment, but all the configurable settings involved soon started to add to much complexity for that goal. 
 
 ## Detailed description for the AWS parts
@@ -172,11 +174,17 @@ But also on the mariadb params, starting with the basics:
 - `max_connections`
 - `query_cache_size`
 
+### Properly use a CI / CD environment
+The Wordpress code should come from a version control software, and this example is missing 100% a needed CI or even CD configuration.
+
 ### Hashicorp Vault
 Use Hashicorp vault for secrets storing and retrieval within the ECS instance & provisioning.
 
 ### Use FPM instead of Apache
 I'm using Apache deployment as it does simplifies my configuration, but FPM has a lower memmory footprint and improved CPU usage.
+
+### Deploy observability tooling
+No metrics or monitoring (prometheus & graphana or Datadog), no alert system (OpsGenie, VictorOPS), no logs management (Clodwatch logs or ELK) are being deployed on this example.
 
 ### Give the option to enable / use NewRelic or any other APM tool
 Probably a little bit complex to provision as it requires API Keys, etc. but It would be a nice tool for application monitoring.
