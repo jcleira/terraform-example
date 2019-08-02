@@ -1,0 +1,45 @@
+---
+- name: Provision Python
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Boostrap python
+      raw: test -e /usr/bin/python || (apt-get -y update && apt-get install -y python-minimal)
+
+# Enable mod rewrites on apache. Which is needed to make Wordpress routing wo
+# work properly.
+- name: Configure Apache
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Enable apache rewrites
+      raw: a2enmod rewrite && a2enmod headers
+
+# On this section we are able to configure PHP's deployment settings. Wordpress
+# docker image still have some PHP optimizations and updates some custom
+# settings. But still some settings need some tuning.
+- name: Configure PHP
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Create Custom PHP settings file
+      raw: touch /usr/local/etc/php/conf.d/custom-settings.ini \
+
+    - name: Update PHP upload max file size to a proper value for Wordpress
+      raw: echo "upload_max_filesize = 10M;" >> /usr/local/etc/php/conf.d/custom-settings.ini \
+    - name: Update PHP post max size to a proper value for Wordpress
+      raw: echo "post_max_size=10M;" >> /usr/local/etc/php/conf.d/custom-settings.ini \
+
+    # TODO this has been added as a needed enhacenment, use Redis to store PHP sessions
+    # - name: Set redis to save PHP sessions
+    #   raw: echo "session.save_handler=redis;" >> /usr/local/etc/php/conf.d/custom-settings.ini \
+    # - name: Set redis URL to save PHP sessions
+    #   raw: echo "session.save_path = \"tcp://redis-sessions-master.capsa.svc.cluster.local:6379?auth=MDyMpe4rr4\"" >> /usr/local/etc/php/conf.d/custom-settings.ini
+
+# I was going to configure Wordpress database connection but we can manage that
+# using the following ENV VARS, those ENV VARS update the wp-config.php
+# settings on the docker-entrypoint in the wordrpess Docker Image
+#  - name: Configure Wordpress
+#  hosts: all
+#  gather_facts: no
+#  tasks:
